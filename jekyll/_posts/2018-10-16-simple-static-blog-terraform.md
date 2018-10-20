@@ -410,7 +410,7 @@ phases:
   build:
     commands:
       # Prepend the PR number to the urls in the jekyll build...
-      - bundle exec jekyll build --baseurl=${CODEBUILD_SOURCE_VERSION}
+      - bundle exec jekyll build --baseurl=/${CODEBUILD_SOURCE_VERSION}
       - export BUCKET_NAME=<YOUR BUCKET NAME HERE>
       # ...and the sync destination
       - export SITE_PATH=$BUCKET_NAME/${CODEBUILD_SOURCE_VERSION}
