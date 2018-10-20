@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - cd jekyll
+      - bundle install
+  build:
+    commands:
+      - JEKYLL_ENV=production bundle exec jekyll build
+      - export BUCKET_NAME=<bucket name>
+      - aws s3 sync _site s3://$BUCKET_NAME --delete

@@ -1,0 +1,19 @@
+version: 0.2
+
+env:
+  parameter-store:
+    "GH_TOKEN": "/CodeBuild/GH_TOKEN"
+
+phases:
+  install:
+    commands:
+      - cd jekyll
+      - bundle install
+  build:
+    commands:
+      - bundle exec jekyll build --baseurl=${CODEBUILD_SOURCE_VERSION}
+      - export BUCKET_NAME=<preview bucket name>
+      - export SITE_PATH=$BUCKET_NAME/${CODEBUILD_SOURCE_VERSION}
+      - aws s3 sync _site s3://$SITE_PATH
+      - export PR_ID=$(echo $CODEBUILD_SOURCE_VERSION | cut -c 4-)
+      - 'curl -H "Authorization: token ${GH_TOKEN}" --data-binary "{\"body\": \"Preview rendered at http://$BUCKET_NAME.s3-website-us-east-1.amazonaws.com/${CODEBUILD_SOURCE_VERSION}\"}" https://api.github.com/repos/<OWNER>/<REPO>/issues/${PR_ID}/comments'
