@@ -11,7 +11,7 @@ phases:
       - bundle install
   build:
     commands:
-      - bundle exec jekyll build --baseurl=${CODEBUILD_SOURCE_VERSION}
+      - bundle exec jekyll build --baseurl=/${CODEBUILD_SOURCE_VERSION}
       - export BUCKET_NAME=<preview bucket name>
       - export SITE_PATH=$BUCKET_NAME/${CODEBUILD_SOURCE_VERSION}
       - aws s3 sync _site s3://$SITE_PATH
